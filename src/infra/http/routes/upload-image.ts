@@ -35,18 +35,21 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
 				contentStream: uploadedFile.file,
 			})
 
-            if(isRight(result)) {
-                console.log(unwrapEither(result))
-                return reply.status(201).send(null)
+            if(uploadedFile.file.truncated) {
+                return reply.status(400).send({ message: 'File size limit reached.'})
             }
 
-            const error = unwrapEither(result)
+			if (isRight(result)) {
+				console.log(unwrapEither(result))
+				return reply.status(201).send(null)
+			}
 
-            switch(error.constructor.name) {
-                case 'InvalidFileFormat':
-                    return reply.status(400).send({ message: error.message })
-            }
+			const error = unwrapEither(result)
 
+			switch (error.constructor.name) {
+				case 'InvalidFileFormat':
+					return reply.status(400).send({ message: error.message })
+			}
 		}
 	)
 }
