@@ -4,15 +4,15 @@ import { db } from '@/infra/db/index.ts'
 import { schema } from '@/infra/db/schemas/index.ts'
 import { type Either, makeRight } from '@/shared/either.ts'
 
-const GetUploadsInput = z.object({
+const getUploadsInput = z.object({
 	searchQuery: z.string().optional(),
 	sortBy: z.enum(['createdAt']).optional(),
-	sortDirection: z.enum(['asc', 'desc']).optional,
+	sortDirection: z.enum(['asc', 'desc']).optional(),
 	page: z.number().optional().default(1),
 	pageSize: z.number().optional().default(20),
 })
 
-type GetUploadsInput = z.input<typeof GetUploadsInput>
+type GetUploadsInput = z.input<typeof getUploadsInput>
 
 type GetUploadsOutput = {
     uploads: {
@@ -25,11 +25,11 @@ type GetUploadsOutput = {
     total: number
 }
 
-export async function uploadImage(
+export async function getUploads(
 	input: GetUploadsInput
 ): Promise<Either<never, GetUploadsOutput>> {
 	const { searchQuery, sortBy, sortDirection, page, pageSize } =
-		GetUploadsInput.parse(input)
+		getUploadsInput.parse(input)
 
 	const [uploads, [{ total }]] = await Promise.all([
 		db
