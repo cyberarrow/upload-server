@@ -8,7 +8,7 @@ import {
 	serializerCompiler,
 	validatorCompiler,
 } from 'fastify-type-provider-zod'
-import { env } from '@/env.ts'
+import { getUploadsRoute } from './routes/get-uploads.ts'
 import { uploadImageRoute } from './routes/upload-image.ts'
 import { transformSwaggerSchema } from './transform-swagger-schema.ts'
 
@@ -48,8 +48,7 @@ server.register(fastifySwaggerUi, {
 })
 
 server.register(uploadImageRoute)
-
-console.log(env)
+server.register(getUploadsRoute)
 
 server.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
 	console.log('Server running!')
